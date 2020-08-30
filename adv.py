@@ -65,6 +65,63 @@ player = Player(world.starting_room)
 # Fill this out with directions to walk
 # traversal_path = ['n', 'n']
 
+## UPER ###
+
+# create traversal function
+
+# needed items:
+
+# traversal path list
+# a hashtable of opposite directions
+# a visited graphs
+
+# create a stack & push the players current room on to the Stack
+# enter a while loop, while the stack is not empty.
+# create a peek function on stack class to allow to view last item
+# reference the last item on the stack DO NOT REMOVE THE LAST Item
+# use the item in position 0 of the stack as the current room of the player
+# use the next item in the stack as the players series of moves
+# check to see if the current room exists in the visited graph
+# if it doesn't then add it to the visited graph using the id for key and initialize it with an empty set
+# the set will represent the paths of the current room which were already taken
+# if there is a next item (meaning the player moved) in the stack use the players current room to reference the current room the player is in
+# and add that path to the set to represent paths taken from that room.
+# if the length of visited graph is the length of room_graph then terminate the while loop and return traversal_path
+# create an unexplored paths list that contains all exits not explored by the player...
+# choose a random path and let the player do a dft add that path to the visited graph every time the player moves
+# add the path and the inverse path to the stack.
+# if the player gets stuck then find a way to make the player back up until he's in a room with unvisited paths and continue
+
+## PSUEDO ##
+
+
+# def traversal():
+#     trav_pth = []
+#     opp_directions = {key == your current direction needed to be reverse: the reversed value}
+#     visited = {}
+
+#     a = stack
+#     player push current room to Stack
+
+#     while stack isn't empty:
+#         peek value = item in Stack
+#         cur_room = a[0]
+#         players_move = a[1]
+
+#         if visited[cur room id] not in visited:
+#             add it with empty set
+
+#         if player moves:
+#             visited_rooms[curr room id] = players_move
+
+#         if the length of visited matches room_graph:
+#             break
+
+#         Do a Depth First traversal
+#         until player is stuck
+#         back up when player is stuck
+#         & loop
+
 
 ### TRAVERSAL CODE ###
 
@@ -85,6 +142,31 @@ def traverse():
 
     my_stack = Stack()
     my_stack.push(value=(player.current_room, None))
+
+    while my_stack.size != 0:
+        # peek references the item on the top of the stack
+        stack = my_stack.peek()
+        # current room will be the first item in stack
+        current_room = stack[0]
+
+        # the next item in stack can represent a direction
+        # travelled from current room
+        travelled_dir = stack[1]
+
+        # if the room isn't in the visited list add it.
+        if current_room.id not in visited:
+            visited[current_room.id] = set()
+
+        # if player travelled in any direction, log the room
+        # which the player travelled from (key) and the direction travelled.
+        if travelled_dir:
+            visited[current_room.id].add(travelled_dir)
+
+        # if all rooms are visited then you're finished
+        if len(visited) == len(room_graph):
+            break
+
+        ## DEPTH FIRST SEARCH ##
 
     return traversal_path
 
