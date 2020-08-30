@@ -168,6 +168,32 @@ def traverse():
 
         ## DEPTH FIRST SEARCH ##
 
+        # get all unexplored edges -- going to be list comp
+        unexplored_path = [edge for edge in current_room.get_exits()
+                           if edge not in visited[current_room.id]]
+
+        # if there are remaining paths in players current room enter this scope:
+        if unexplored_path:
+            # choose a random path
+            random_path = random.choice(unexplored_path)
+            # add the random path to the current rooms visited paths before traversing down the path
+            visited[current_room.id].add(random_path)
+            # add the path to the stack so it could be traversed
+            # also add the inverse direction to the stack will be used as travelled_dir
+            # this will allow the player to back track if stuck
+            my_stack.push(value=(current_room.get_room_in_direction(
+                random_path), opp_directions[random_path]))
+            # append traversal path with all of the travelled directions
+            traversal_path.append(random_path)
+
+        # else if the player is stuck because there are no remaining paths enter this scope:
+        else:
+            # back up and log that move in traversal_path
+            traversal_path.append(travelled_dir)
+            # pop the last item out of the stack this will remove travelled_dir
+            # leaving it empty so on the next move it will be added again
+            my_stack.pop()
+
     return traversal_path
 
 
