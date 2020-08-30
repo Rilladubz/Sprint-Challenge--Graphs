@@ -142,27 +142,25 @@ def traverse():
 
     my_stack = Stack()
     my_stack.push(value=(player.current_room, None))
-
+    # while stack is not empty enter loop
     while my_stack.size != 0:
-        # peek references the item on the top of the stack
+        # peek references items in stack
         stack = my_stack.peek()
-        # current room will be the first item in stack
+        # item in the first position will be current rooms
         current_room = stack[0]
-
-        # the next item in stack can represent a direction
-        # travelled from current room
+        # second items added will be directions travelled.
         travelled_dir = stack[1]
 
-        # if the room isn't in the visited list add it.
+        print(travelled_dir)
+        # if this room id doesn't exist in visited add it with a initialized set
+        # visited schema will be {'room_id': {dir_traveled, dir_traveled}}
         if current_room.id not in visited:
             visited[current_room.id] = set()
-
-        # if player travelled in any direction, log the room
-        # which the player travelled from (key) and the direction travelled.
+        # if the player travels but has no remaining paths in any direction log the direction which the player moved from.
+        # this will allow the player to back track
         if travelled_dir:
             visited[current_room.id].add(travelled_dir)
-
-        # if all rooms are visited then you're finished
+        # if visited equal the size of room graph we're done.
         if len(visited) == len(room_graph):
             break
 
@@ -172,15 +170,14 @@ def traverse():
         unexplored_path = [edge for edge in current_room.get_exits()
                            if edge not in visited[current_room.id]]
 
-        # if there are remaining paths in players current room enter this scope:
+        # If there are any unexplored paths
         if unexplored_path:
             # choose a random path
             random_path = random.choice(unexplored_path)
             # add the random path to the current rooms visited paths before traversing down the path
             visited[current_room.id].add(random_path)
-            # add the path to the stack so it could be traversed
-            # also add the inverse direction to the stack will be used as travelled_dir
-            # this will allow the player to back track if stuck
+            # get the room in the random path direction and add it to the stack, secondly add the room path in the opposite direction in case
+            # the player need to back track.
             my_stack.push(value=(current_room.get_room_in_direction(
                 random_path), opp_directions[random_path]))
             # append traversal path with all of the travelled directions
