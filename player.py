@@ -13,4 +13,5 @@ class Player:
 
 
 def test():
-    test1 - 'string'
+    test1 = 'string'
+    test2 = 'string2'
