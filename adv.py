@@ -141,7 +141,8 @@ def traverse():
     visited = {}
 
     my_stack = Stack()
-    my_stack.push(value=(player.current_room, None))
+    my_stack.push((player.current_room, None))
+
     # while stack is not empty enter loop
     while my_stack.size != 0:
         # peek references items in stack
@@ -151,7 +152,7 @@ def traverse():
         # second items added will be directions travelled.
         travelled_dir = stack[1]
 
-        print(travelled_dir)
+        # print(travelled_dir)
         # if this room id doesn't exist in visited add it with a initialized set
         # visited schema will be {'room_id': {dir_traveled, dir_traveled}}
         if current_room.id not in visited:
@@ -178,7 +179,7 @@ def traverse():
             visited[current_room.id].add(random_path)
             # get the room in the random path direction and add it to the stack, secondly add the room path in the opposite direction in case
             # the player need to back track.
-            my_stack.push(value=(current_room.get_room_in_direction(
+            my_stack.push((current_room.get_room_in_direction(
                 random_path), opp_directions[random_path]))
             # append traversal path with all of the travelled directions
             traversal_path.append(random_path)
